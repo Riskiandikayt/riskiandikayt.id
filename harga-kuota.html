@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Harga Kuota</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h2>Daftar Harga Kuota</h2>
+    <div id="price-list">
+        <!-- Daftar harga akan ditampilkan di sini -->
+    </div>
+  <a href="daftar-toko.html" class="back-button"><i class="fas fa-arrow-left"></i>Back</a>
+
+
+    <script>
+        // URL API untuk mendapatkan harga
+        const API_URL = 'https://h2h.okeconnect.com/api/v1/products';
+        const API_KEY = '928863317125892041706015OKCT34A04DB8F8510C3C6BE37132D22C589E';
+
+        // Fungsi untuk mengambil data harga kuota dari API
+        async function fetchPriceList() {
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${API_KEY}`,
+                    }
+                });
+                const data = await response.json();
+                displayPriceList(data);
+            } catch (error) {
+                console.error('Error fetching data: ', error);
+                document.getElementById('price-list').innerHTML = 'Gagal mengambil data harga.';
+            }
+        }
+
+        // Fungsi untuk menampilkan daftar harga
+        function displayPriceList(data) {
+            const priceListContainer = document.getElementById('price-list');
+            if (data && data.products) {
+                let priceHTML = '<ul>';
+                data.products.forEach(product => {
+                    priceHTML += `<li><strong>${product.name}</strong>: ${product.price} IDR</li>`;
+                });
+                priceHTML += '</ul>';
+                priceListContainer.innerHTML = priceHTML;
+            } else {
+                priceListContainer.innerHTML = 'Tidak ada produk yang tersedia.';
+            }
+        }
+
+        // Fungsi kembali ke halaman sebelumnya
+        function backToHome() {
+            window.history.back("daftar-toko.html"); // Kembali ke halaman sebelumnya
+        }
+
+        // Mengambil dan menampilkan harga kuota ketika halaman dimuat
+        fetchPriceList();
+    </script>
+</body>
+</html>

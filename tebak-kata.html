@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tebak Kata</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .game-container {
+            margin-top: 50px;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            font-size: 1.2em;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .hidden {
+            display: none;
+        }
+        #answer {
+            padding: 10px;
+            margin-top: 15px;
+            font-size: 1em;
+            width: 80%;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        #hint {
+            background-color: #fffbcc;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #f0e68c;
+            border-radius: 5px;
+        }
+        #points, #level {
+            font-weight: bold;
+            color: #4CAF50;
+        }
+        #status {
+            font-size: 1.2em;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Tebak Kata</h1>
+        <p1>SUBCRIBE : RISKI ANDIKA YT</p1>
+        <p id="status"></p>
+        <p>Masukkan kata yang tepat untuk menebak.</p>
+        <p id="pointsContainer">
+            Poin: <span id="points">0</span>
+            &nbsp;|&nbsp;
+            Level: <span id="level">1</span>
+        </p>
+        <div id="question"></div>
+        
+        <div id="hint" class="hidden">
+            <p></p>
+        </div>
+        
+        <input type="text" id="answer" placeholder="Tebak kata di sini">
+        	
+        <button onclick="checkAnswer()">Tebak</button>
+        <button id="nextButton" class="hidden" onclick="nextLevel()">Lanjutkan</button>
+        <button onclick="showHint()">Bantuan</button>
+    </div>
+           
+    <button onclick="goBack()">Kembali</button>      
+    <button id="musicButton" onclick="toggleMusic()">Hidupkan Musik</button>       
+
+    <audio id="bgMusic" loop>
+        <source src="music.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        let points = 0;
+        let level = 0;
+        let isMusicPlaying = false;
+
+        const questions = [
+    { question: "Siapakah Nama pembuat Website ini?", answer: "Riski", hint: "Kata ini diawali dengan 'R' dan berjumlah 5 huruf." },
+    { question: "Nama belakang nama belakang nya siyapa?", answer: "Andika", hint: "Kata ini diawali dengan 'A' dan berjumlah 6 huruf." },
+    { question: "Bahasa pemrograman yang digunakan untuk web?", answer: "Java", hint: "Kata ini diawali dengan 'J' dan berjumlah 4 huruf." },
+    { question: "Bahasa markup untuk halaman web?", answer: "HTML", hint: "Kata ini diawali dengan 'H' dan berjumlah 4 huruf." },
+    { question: "Bahasa pemrograman untuk membuat aplikasi Android?", answer: "Kotlin", hint: "Kata ini diawali dengan 'K' dan berjumlah 6 huruf." },
+    { question: "Perusahaan yang mengembangkan web browser Chrome?", answer: "Google", hint: "Kata ini diawali dengan 'G' dan berjumlah 6 huruf." },
+    { question: "Apa nama website berbagi video terbesar?", answer: "YouTube", hint: "Kata ini diawali dengan 'Y' dan berjumlah 7 huruf." },
+    { question: "Platform media sosial untuk berbagi foto dan video?", answer: "Instagram", hint: "Kata ini diawali dengan 'I' dan berjumlah 9 huruf." },
+    { question: "Bahasa pemrograman untuk pengembangan situs web dinamis?", answer: "PHP", hint: "Kata ini diawali dengan 'P' dan berjumlah 3 huruf." },
+    { question: "Bentuk ekstensi file untuk gambar?", answer: "JPEG", hint: "Kata ini diawali dengan 'J' dan berjumlah 4 huruf." },
+    { question: "Apa nama sistem operasi yang dikembangkan oleh Microsoft?", answer: "Windows", hint: "Kata ini diawali dengan 'W' dan berjumlah 7 huruf." },
+    { question: "Apa singkatan dari 'HyperText Markup Language'?", answer: "HTML", hint: "Kata ini diawali dengan 'H' dan berjumlah 4 huruf." },
+    { question: "Platform untuk berbagi kode sumber?", answer: "GitHub", hint: "Kata ini diawali dengan 'G' dan berjumlah 6 huruf." },
+    { question: "Apa nama framework front-end populer untuk JavaScript?", answer: "React", hint: "Kata ini diawali dengan 'R' dan berjumlah 5 huruf." },
+    { question: "Apa nama game yang dimainkan menggunakan papan catur?", answer: "Catur", hint: "Kata ini diawali dengan 'C' dan berjumlah 5 huruf." },
+    { question: "Siapakah Presiden pertama Indonesia?", answer: "Soekarno", hint: "Kata ini diawali dengan 'S' dan berjumlah 8 huruf." },
+    { question: "Nama ibu kota Indonesia?", answer: "Jakarta", hint: "Kata ini diawali dengan 'J' dan berjumlah 7 huruf." },
+    { question: "Kota yang dikenal dengan julukan Kota Kembang?", answer: "Bandung", hint: "Kata ini diawali dengan 'B' dan berjumlah 6 huruf." },
+    { question: "Kepanjangan dari CPU?", answer: "Central Processing Unit", hint: "Terdiri dari tiga kata." },
+    { question: "Perangkat keras yang digunakan untuk menyimpan data?", answer: "Hard Disk", hint: "Terdiri dari dua kata, diawali dengan 'H' dan 'D'." },
+    { question: "Jenis sistem operasi yang berbasis Unix dan dikembangkan oleh Apple?", answer: "macOS", hint: "Kata ini diawali dengan 'M' dan berjumlah 5 huruf." },
+    { question: "Bahasa pemrograman yang digunakan untuk pengembangan aplikasi iOS?", answer: "Swift", hint: "Kata ini diawali dengan 'S' dan berjumlah 5 huruf." },
+    { question: "Jenis file untuk menyimpan dokumen teks?", answer: "TXT", hint: "Tiga huruf, diawali dengan 'T'." },
+    { question: "Platform musik streaming yang dimiliki oleh Spotify?", answer: "Spotify", hint: "Kata ini diawali dengan 'S' dan berjumlah 7 huruf." },
+    { question: "Apakah nama alat untuk menggambar di komputer?", answer: "Mouse", hint: "Kata ini diawali dengan 'M' dan berjumlah 5 huruf." },
+    { question: "Penyedia layanan cloud computing terbesar?", answer: "Amazon", hint: "Kata ini diawali dengan 'A' dan berjumlah 6 huruf." },
+    { question: "Teknologi yang digunakan untuk mengembangkan aplikasi berbasis Web?", answer: "React", hint: "Kata ini diawali dengan 'R' dan berjumlah 5 huruf." },
+    { question: "Nama alat untuk mendengarkan musik secara pribadi?", answer: "Headphone", hint: "Kata ini diawali dengan 'H' dan berjumlah 9 huruf." },
+    { question: "Bahasa pemrograman yang digunakan untuk pengembangan aplikasi web backend?", answer: "Node.js", hint: "Terdiri dari dua kata, diawali dengan 'N'." },
+    { question: "Penyedia layanan hosting web yang terkenal?", answer: "Bluehost", hint: "Kata ini diawali dengan 'B' dan berjumlah 8 huruf." },
+    { question: "Teknologi yang digunakan untuk membuat antarmuka pengguna di web?", answer: "CSS", hint: "Tiga huruf, diawali dengan 'C'." },
+    { question: "Apa yang digunakan untuk memonitor aktivitas komputer?", answer: "Task Manager", hint: "Terdiri dari dua kata, diawali dengan 'T'." },
+    { question: "Jenis file untuk gambar vektor?", answer: "SVG", hint: "Tiga huruf, diawali dengan 'S'." },
+    { question: "Apa nama aplikasi untuk mengedit foto di ponsel?", answer: "Photoshop", hint: "Kata ini diawali dengan 'P' dan berjumlah 9 huruf." },
+    { question: "Nama layanan penyimpanan cloud milik Google?", answer: "Google Drive", hint: "Terdiri dari dua kata, diawali dengan 'G'." },
+    { question: "Apa nama aplikasi pesan instan yang dikembangkan oleh Facebook?", answer: "Messenger", hint: "Kata ini diawali dengan 'M' dan berjumlah 9 huruf." },
+    { question: "Situs web untuk mencari informasi?", answer: "Google", hint: "Kata ini diawali dengan 'G' dan berjumlah 6 huruf." },
+    { question: "Apa singkatan dari URL?", answer: "Uniform Resource Locator", hint: "Terdiri dari tiga kata." },
+    { question: "Alat untuk merekam suara?", answer: "Microphone", hint: "Kata ini diawali dengan 'M' dan berjumlah 10 huruf." },
+    { question: "Layanan streaming video milik Google?", answer: "YouTube", hint: "Kata ini diawali dengan 'Y' dan berjumlah 7 huruf." },
+    { question: "Apa nama editor kode sumber open-source yang populer?", answer: "VS Code", hint: "Terdiri dari dua kata, diawali dengan 'V'." },
+    { question: "Bahasa pemrograman yang dikembangkan oleh Bjarne Stroustrup?", answer: "C++", hint: "Tiga huruf, diawali dengan 'C'." },
+    { question: "Nama perusahaan yang mengembangkan iPhone?", answer: "Apple", hint: "Kata ini diawali dengan 'A' dan berjumlah 5 huruf." },
+    { question: "Software pengolah kata yang dikembangkan oleh Microsoft?", answer: "Word", hint: "Kata ini diawali dengan 'W' dan berjumlah 4 huruf." },
+    { question: "Nama game battle royale yang dikembangkan oleh Epic Games?", answer: "Fortnite", hint: "Kata ini diawali dengan 'F' dan berjumlah 8 huruf." },
+    { question: "Jenis perangkat yang digunakan untuk menampilkan gambar?", answer: "Monitor", hint: "Kata ini diawali dengan 'M' dan berjumlah 7 huruf." },
+    { question: "Bahasa pemrograman yang digunakan untuk aplikasi web dinamis?", answer: "Python", hint: "Kata ini diawali dengan 'P' dan berjumlah 6 huruf." },
+    { question: "Apa nama database yang banyak digunakan untuk web development?", answer: "MySQL", hint: "Kata ini diawali dengan 'M' dan berjumlah 4 huruf." },
+    { question: "Sistem operasi berbasis open-source?", answer: "Linux", hint: "Kata ini diawali dengan 'L' dan berjumlah 5 huruf." },
+    { question: "Platform untuk berbagi kode sumber secara online?", answer: "GitHub", hint: "Kata ini diawali dengan 'G' dan berjumlah 6 huruf." },
+    { question: "Format gambar dengan kompresi lossy?", answer: "JPEG", hint: "Kata ini diawali dengan 'J' dan berjumlah 4 huruf." },
+    { question: "Jenis file untuk halaman web?", answer: "HTML", hint: "Kata ini diawali dengan 'H' dan berjumlah 4 huruf." },
+    { question: "Apa nama aplikasi pengolah angka yang dikembangkan oleh Microsoft?", answer: "Excel", hint: "Kata ini diawali dengan 'E' dan berjumlah 5 huruf." },
+    { question: "Bahasa pemrograman yang digunakan untuk membuat aplikasi Android?", answer: "Java", hint: "Kata ini diawali dengan 'J' dan berjumlah 4 huruf." },
+    { question: "Apakah nama sistem operasi untuk perangkat Apple?", answer: "iOS", hint: "Tiga huruf, diawali dengan 'I'." },
+    { question: "Layanan cloud untuk menyimpan file pribadi?", answer: "OneDrive", hint: "Kata ini diawali dengan 'O' dan berjumlah 8 huruf." },
+    { question: "Perusahaan pembuat sistem operasi Windows?", answer: "Microsoft", hint: "Kata ini diawali dengan 'M' dan berjumlah 9 huruf." },
+    { question: "Nama aplikasi untuk berbagi gambar dan video?", answer: "Instagram", hint: "Kata ini diawali dengan 'I' dan berjumlah 9 huruf." }
+];
+
+        function checkAnswer() {
+            const userAnswer = document.getElementById('answer').value;
+            const correctAnswer = questions[level].answer;
+            
+            if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+                points += 10; // Menambah poin 10 setiap jawaban benar
+                level++; // Meningkatkan level
+                document.getElementById('status').textContent = 'Selamat! Jawaban benar.';
+                document.getElementById('nextButton').classList.remove('hidden'); // Menampilkan tombol lanjutkan
+            } else {
+                document.getElementById('status').textContent = 'Coba lagi!';
+                document.getElementById('nextButton').classList.add('hidden'); // Sembunyikan tombol lanjutkan jika jawaban salah
+            }
+            
+            document.getElementById('points').textContent = points;
+            document.getElementById('level').textContent = level + 1;
+        }
+
+        function showHint() {
+            const hintDiv = document.getElementById('hint');
+            hintDiv.classList.remove('hidden');
+            const hint = questions[level].hint;
+            document.getElementById('hint').innerHTML = `<p>${hint}</p>`; 
+
+            // Menyembunyikan hint setelah 3 detik
+            setTimeout(function() {
+                hintDiv.classList.add('hidden');
+            }, 3000); // 3000 milidetik = 3 detik
+        }
+
+        function goBack() {
+            window.location.href = 'game.html';
+        }
+
+        // Fungsi untuk menghidupkan dan mematikan musik
+        function toggleMusic() {
+            const music = document.getElementById('bgMusic');
+            const musicButton = document.getElementById('musicButton');
+            
+            if (isMusicPlaying) {
+                music.pause(); // Hentikan musik
+                musicButton.textContent = 'Hidupkan Musik';
+            } else {
+                music.play(); // Putar musik
+                musicButton.textContent = 'Matikan Musik';
+            }
+            
+            isMusicPlaying = !isMusicPlaying;
+        }
+
+        function loadQuestion() {
+            if (level < questions.length) {
+                document.getElementById('answer').value = '';
+                document.getElementById('status').textContent = '';
+                document.getElementById('nextButton').classList.add('hidden');
+                document.getElementById('hint').classList.add('hidden');
+
+                document.getElementById('level').textContent = level + 1;
+                document.getElementById('question').textContent = questions[level].question;
+            } else {
+                document.getElementById('status').textContent = 'Selamat! Kamu telah menyelesaikan semua level.';
+                document.getElementById('nextButton').classList.add('hidden');
+            }
+        }
+
+        function nextLevel() {
+            loadQuestion();
+        }
+
+        window.onload = function() {
+            loadQuestion(); // Mulai game dengan soal pertama
+        }
+    </script>
+</body>
+</html>

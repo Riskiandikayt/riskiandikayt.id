@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tebak Angka</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .game-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 16px;
+            margin: 5px 0;
+        }
+
+        #game-info {
+            margin-bottom: 15px;
+        }
+
+        #game-info p {
+            font-size: 14px;
+            margin: 5px 0;
+        }
+
+        input {
+            padding: 8px;
+            width: 100%;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px;
+            width: 100%;
+            margin: 5px 0;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .next {
+            display: none;
+            background-color: #2196F3;
+        }
+
+        .next:hover {
+            background-color: #1976d2;
+        }
+
+        #music-controls {
+            margin-top: 20px;
+        }
+
+        #music-toggle-btn {
+            background-color: #f44336;
+        }
+
+        #music-toggle-btn:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+
+<div class="game-container">
+    <h1>Tebak Angka</h1>
+    <p>SUBSCRIBE : RISKI ANDIKA YT</p>
+    <p>Masukkan angka antara 1 hingga 10.000</p>
+
+    <div id="game-info">
+        <p>Total Poin: <span id="total-points">0</span></p>
+        <p>Level: <span id="level">1</span></p>
+        <p>Kesalahan: <span id="error-count">0</span></p>
+    </div>
+
+    <p id="question"></p>
+    <input type="number" id="answer" min="1" max="10000" placeholder="Masukkan angka">
+    <button onclick="checkAnswer()">Tebak</button>
+    <p id="status"></p>
+
+    <button class="help" onclick="showHelp()">Bantuan</button>
+    <button class="back" onclick="goBack()">Kembali ke Game</button>
+    <button class="next" onclick="nextQuestion()">Lanjut ke Jawaban Selanjutnya</button>
+
+    <div id="music-controls">
+        <button id="music-toggle-btn" onclick="toggleMusic()">Putar Musik</button>
+    </div>
+
+    <audio id="background-music" loop>
+        <source src="path_to_music_file.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+</div>
+
+<script>
+    const questions = [
+        { question: "Berapa hasil dari 2 + 5?", answer: 7 },
+        { question: "Berapa hasil dari 3 + 4?", answer: 7 },
+        { question: "Berapa hasil dari 6 + 3?", answer: 9 },
+        { question: "Berapa hasil dari 5 + 2?", answer: 7 },
+        { question: "Berapa hasil dari 8 - 3?", answer: 5 },
+        { question: "Berapa hasil dari 9 + 1?", answer: 10 },
+        { question: "Berapa hasil dari 10 - 7?", answer: 3 },
+        { question: "Berapa hasil dari 4 + 6?", answer: 10 },
+        { question: "Berapa hasil dari 15 - 8?", answer: 7 },
+        { question: "Berapa hasil dari 7 + 2?", answer: 9 },
+        { question: "Berapa hasil dari 3 + 3?", answer: 6 },
+        { question: "Berapa hasil dari 5 + 5?", answer: 10 },
+        { question: "Berapa hasil dari 12 - 4?", answer: 8 },
+        { question: "Berapa hasil dari 14 - 6?", answer: 8 },
+        { question: "Berapa hasil dari 7 x 2?", answer: 14 },
+        { question: "Berapa hasil dari 9 x 3?", answer: 27 }
+    ];
+
+    let currentQuestionIndex = 0;
+    let totalPoints = 0;
+    let level = 1;
+    let errorCount = 0;
+    let currentQuestion = questions[currentQuestionIndex];
+    let isMusicPlaying = false;
+
+    // Menampilkan pertanyaan pertama
+    document.getElementById('question').textContent = currentQuestion.question;
+
+    function checkAnswer() {
+        const userAnswer = parseInt(document.getElementById('answer').value);
+        const statusElement = document.getElementById('status');
+
+        if (userAnswer === currentQuestion.answer) {
+            totalPoints += 10;
+            level = Math.floor(totalPoints / 100) + 1;
+            statusElement.textContent = 'Selamat! Jawaban benar.';
+            statusElement.style.color = 'green';
+            document.querySelector('.next').style.display = 'inline-block';
+        } else {
+            errorCount++;
+            statusElement.textContent = 'Coba lagi! Jawaban salah.';
+            statusElement.style.color = 'red';
+        }
+
+        document.getElementById('total-points').textContent = totalPoints;
+        document.getElementById('level').textContent = level;
+        document.getElementById('error-count').textContent = errorCount;
+    }
+
+    function nextQuestion() {
+        document.querySelector('.next').style.display = 'none';
+        document.getElementById('status').textContent = '';
+        
+        currentQuestionIndex++;
+        if (currentQuestionIndex >= questions.length) {
+            currentQuestionIndex = 0;
+        }
+        
+        currentQuestion = questions[currentQuestionIndex];
+        document.getElementById('question').textContent = currentQuestion.question;
+        document.getElementById('answer').value = '';
+    }
+
+    function showHelp() {
+        alert('Petunjuk:\n1. Masukkan angka yang sesuai dengan hasil pertanyaan.\n2. Coba tebak angka yang benar.\n3. Jika salah, coba lagi.\n4. Jika benar, kamu menang!');
+    }
+
+    function goBack() {
+        window.location.href = 'game.html';
+    }
+
+    function toggleMusic() {
+        const music = document.getElementById('background-music');
+        const musicButton = document.getElementById('music-toggle-btn');
+        
+        if (isMusicPlaying) {
+            music.pause();
+            musicButton.textContent = "Putar Musik";
+        } else {
+            music.play();
+            musicButton.textContent = "Matikan Musik";
+        }
+        isMusicPlaying = !isMusicPlaying;
+    }
+</script>
+
+</body>
+</html>

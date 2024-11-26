@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toko Digital - Riski Andika</title>
+    <!-- Menambahkan CDN Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Reset margin dan padding untuk semua elemen */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Background dan font dasar */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #fafafa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        /* Animasi tombol */
+        button {
+            padding: 12px 24px;
+            background-color: #0073e6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #005bb5;  /* Mengubah warna saat hover */
+            transform: scale(1.1);       /* Membesarkan tombol saat hover */
+        }
+
+        button:active {
+            transform: scale(0.98);      /* Menekan tombol sedikit saat diklik */
+            background-color: #003d80;   /* Menyesuaikan warna saat tombol ditekan */
+        }
+
+        /* Animasi masuk */
+        @keyframes fadeInUp {
+            from {
+                transform: translateY(100px);  /* Memulai animasi dari bawah */
+                opacity: 0;                    /* Memulai dengan transparansi 0 */
+            }
+            to {
+                transform: translateY(0);      /* Akhirnya posisinya kembali ke tempat normal */
+                opacity: 1;                    /* Opacity menjadi penuh (terlihat) */
+            }
+        }
+
+        /* Kontainer utama */
+        .container {
+            background-color: white;
+            width: 100%;
+            max-width: 700px;
+            padding: 40px 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            transform: scale(0);
+            animation: fadeInUp 1s forwards;
+        }
+
+        /* Profil */
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-header h1 {
+            font-size: 36px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .profile-header p {
+            font-size: 18px;
+            color: #777;
+            margin-top: 10px;
+        }
+
+        .profile-image {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border: 4px solid #0073e6;
+        }
+
+        /* Status Produk */
+        .product-status {
+            margin-top: 20px;
+        }
+
+        .product-status p {
+            font-size: 18px;
+        }
+
+        /* Daftar Link */
+        .links {
+            margin-top: 40px;
+        }
+
+        .links a {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 12px;
+            background-color: #0073e6;
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .links a i {
+            margin-right: 15px;
+            font-size: 24px;
+        }
+
+        .links a:hover {
+            background-color: #005bb5;
+        }
+
+        /* Ikon Media Sosial */
+        .social-icons {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .social-icons a {
+            margin: 0 15px;
+            color: #333;
+            text-decoration: none;
+            font-size: 28px;
+            transition: color 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: #0073e6;
+        }
+
+        /* Posisi tombol bundar di kanan bawah */
+        .floating-buttons {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+
+        .floating-buttons a {
+            display: block;
+            background-color: #25d366;
+            color: white;
+            border-radius: 50%;
+            padding: 15px;
+            margin: 10px;
+            font-size: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .floating-buttons a:hover {
+            transform: scale(1.1);
+        }
+
+        /* Desain untuk ikon */
+        .floating-buttons i {
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Floating Button -->
+    <div class="floating-buttons">
+        <a href="chat.html" class="chat-publish" title="Chat Publish">
+            <i class="fas fa-comment-dots"></i>
+        </a>
+        <a href="botz-riski.html" class="botz-riski" title="BOTZ RISKI Asisten">
+            <i class="fas fa-robot"></i>
+        </a>
+        <a href="#" class="group-whatsapp" title="GROUP WHATSAPP">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+    </div>
+
+    <!-- Konten Utama -->
+    <div class="container">
+        <!-- Header Profil -->
+        <div class="profile-header">
+            <img src="https://i.ibb.co.com/yfLvHzD/riski-andika.jpg" alt="Riski Andika" class="profile-image">
+            <h1>Riski Andika</h1>
+            <p>Developer | Designer | Content Creator</p>
+        </div>
+
+        <!-- Status Produk -->
+        <div id="productStatus" class="product-status">
+            <p>Status Produk: <span id="statusText">Memeriksa...</span></p>
+            <button id="checkAvailabilityBtn">Cek Ketersediaan</button>
+        </div>
+
+        <!-- Daftar Link -->
+        <div class="links">
+            <a href="daftar-toko.html" target="_self">
+                <i class="fas fa-store"></i> Toko Kami
+                <a href="gamepad.html" target="_blank">
+  <i class="fas fa-gamepad"></i> Game
+</a>
+
+            </a>
+            <a href="https://saweria.co/riskiandikayt" target="_blank">
+                <i class="fas fa-donate"></i> Donasi
+            </a>
+            <a href="https://www.instagram.com/@riski_andika_yt" target="_blank">
+                <i class="fab fa-instagram"></i> Instagram
+            </a>
+            <a href="https://www.facebook.com/riskiandikayt" target="_blank">
+                <i class="fab fa-facebook"></i> Facebook
+            </a>
+            <a href="https://twitter.com/riski_andika_yt" target="_blank">
+                <i class="fab fa-twitter"></i> Twitter
+            </a>
+            <a href="https://youtube.com/@riskiandikayt1302" target="_blank">
+                <i class="fab fa-YouTube"></i> YouTube
+            </a>
+            <a href="https://tiktok.com/@Riski_andika_yt" target="_blank">
+                <i class="fab fa-tiktok"></i> Tiktok
+            </a>
+        </div>
+
+        <!-- Ikon Media Sosial -->
+        <div class="social-icons">
+            <a href="https://www.instagram.com/riskiandika226" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.facebook.com/riskiandika226" target="_blank"><i class="fab fa-facebook"></i></a>
+            <a href="https://twitter.com/riskiandika226" target="_blank"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.linkedin.com/in/riskiandika226" target="_blank"><i class="fab fa-linkedin"></i></a>
+            <a href="https://github.com/riskiandika226" target="_blank"><i class="
+    </div>
+
+    <script>
+        // Proxy CORS untuk menangani masalah CORS
+        (function() {
+            var cors_api_host = 'cors-anywhere.herokuapp.com';
+            var cors_api_url = 'https://' + cors_api_host + '/';
+            var slice = [].slice;
+            var origin = window.location.protocol + '//' + window.location.host;
+            var open = XMLHttpRequest.prototype.open;
+            XMLHttpRequest.prototype.open = function() {
+                var args = slice.call(arguments);
+                var targetOrigin = /^https?:\/\/([^\/]+)/i.exec(args[1]);
+                if (targetOrigin && targetOrigin[0].toLowerCase() !== origin &&
+                    targetOrigin[1] !== cors_api_host) {
+                    args[1] = cors_api_url + args[1];
+                }
+                return open.apply(this, args);
+            };
+        })();
+
+        // API Key dari file config.js atau tempat yang sesuai
+        const API_KEY = "cYTFNaPP";  // Ganti dengan API key yang sesuai
+
+        // Cek status produk dari cache terlebih dahulu
+        function getProductStatusFromCache() {
+            const cachedStatus = localStorage.getItem('productStatus');
+            if (cachedStatus) {
+                return JSON.parse(cachedStatus);
+            }
+            return null;
+        }
+
+        // Menyimpan status produk ke cache
+        function saveProductStatusToCache(status) {
+            localStorage.setItem('productStatus', JSON.stringify(status));
+        }
+
+        // Fungsi untuk memeriksa ketersediaan produk
+        async function checkProductAvailability() {
+            const statusText = document.getElementById('statusText');
+
+            // Cek status produk dari cache terlebih dahulu
+            const cachedStatus = getProductStatusFromCache();
+            if (cachedStatus) {
+                statusText.textContent = cachedStatus;
+                return;
+            }
+
+            // Jika status tidak ditemukan di cache, lanjutkan pengecekan
+            statusText.textContent = "Memeriksa...";
+            try {
+                const response = await fetch(`https://api.example.com/produk/status?apikey=${API_KEY}`);
+                const data = await response.json();
+
+                if (data.status === 'available') {
+                    statusText.textContent = "Produk Tersedia!";
+                } else {
+                    statusText.textContent = "Produk Tidak Tersedia";
+                }
+
+                // Simpan status ke cache
+                saveProductStatusToCache(statusText.textContent);
+            } catch (error) {
+                statusText.textContent = "Gagal memeriksa status produk";
+                console.error("Error fetching product status:", error);
+            }
+        }
+
+        // Event listener untuk tombol cek ketersediaan
+        document.getElementById('checkAvailabilityBtn').addEventListener('click', checkProductAvailability);
+    </script>
+</body>
+</html>

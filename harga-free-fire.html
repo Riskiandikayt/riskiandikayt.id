@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toko Digital - Riski Andika</title>
+    <style>
+        /* Reset margin dan padding untuk semua elemen */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #fafafa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            overflow: hidden; /* Menghindari scroll pada body */
+        }
+
+        .container {
+            background-color: white;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh; /* Membatasi tinggi kontainer */
+            overflow-y: auto; /* Menambahkan scroll vertikal jika konten melebihi batas */
+            padding: 30px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Profil dan Link Sosial */
+        .profile-header {
+            margin-bottom: 30px;
+        }
+
+        .profile-header h1 {
+            font-size: 32px;
+            color: #333;
+        }
+
+        .profile-header p {
+            font-size: 14px;
+            color: #777;
+            margin-top: 5px;
+        }
+
+        .profile-image {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Daftar Link */
+        .links a {
+            display: block;
+            margin: 10px 0;
+            padding: 12px 0;
+            background-color: #0073e6;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .links a:hover {
+            background-color: #005bb5;
+        }
+
+        /* Produk dan Layanan */
+        .product-list, .service-page, .price-list-page {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .product {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .product button {
+            padding: 10px 20px;
+            background-color: #0073e6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .product button:hover {
+            background-color: #005bb5;
+        }
+
+        /* Tombol kembali */
+        .back-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #e6e6e6;
+            color: #333;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        .back-button:hover {
+            background-color: #cccccc;
+        }
+
+        /* Daftar harga */
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background-color: #f9f9f9;
+            margin: 5px 0;
+            border-radius: 8px;
+        }
+
+        /* Tombol untuk simpan harga baru */
+        .add-price-form {
+            margin-top: 20px;
+        }
+
+        .add-price-form input, .add-price-form button {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 8px;
+        }
+
+        .add-price-form button {
+            background-color: #0073e6;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .add-price-form button:hover {
+            background-color: #005bb5;
+        }
+
+        /* Ikon media sosial */
+        .social-icons {
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            margin: 0 10px;
+            color: #333;
+            text-decoration: none;
+            font-size: 24px;
+        }
+
+        .social-icons a:hover {
+            color: #0073e6;
+        }
+
+        /* Responsivitas untuk perangkat kecil */
+        @media (max-width: 600px) {
+            .container {
+                width: 90%;
+                padding: 20px;
+            }
+
+            .profile-header h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Profil -->
+        <div class="profile-header">
+            <img src="https://i.ibb.co/pyVTkbh/FB-IMG-1731470933800.jpg" alt="Riski Andika" class="profile-image">
+            <h1>Riski Andika</h1>
+            <p>Developer | Designer | Content Creator</p>
+        </div>
+
+        <!-- Daftar Link -->
+        <div class="links">
+            <a href="https://www.instagram.com/riskiandika226" target="_blank">Instagram</a>
+            <a href="https://www.facebook.com/riskiandika226" target="_blank">Facebook</a>
+            <a href="https://twitter.com/riskiandika226" target="_blank">Twitter</a>
+            <a href="https://www.linkedin.com/in/riskiandika226" target="_blank">LinkedIn</a>
+            <a href="https://github.com/riskiandika226" target="_blank">GitHub</a>
+        </div>
+
+        <!-- Ikon Media Sosial -->
+        <div class="social-icons">
+            <a href="https://www.instagram.com/riskiandika226" target="_blank">📸</a>
+            <a href="https://www.facebook.com/riskiandika226" target="_blank">📘</a>
+            <a href="https://twitter.com/riskiandika226" target="_blank">🐦</a>
+            <a href="https://www.linkedin.com/in/riskiandika226" target="_blank">🔗</a>
+        </div>
+
+        <!-- Daftar Produk Toko -->
+        <div class="product-list" id="productList">
+            <div class="product">
+                <h2>Isi Ulang Pulsa & Kuota</h2>
+                <p>Layanan pengisian pulsa, kuota internet, dan PLN.</p>
+                <button onclick="showServicePage('digital')">Pesan Sekarang</button>
+            </div>
+            <div class="product">
+                <h2>Top-Up Game</h2>
+                <p>Top-up berbagai game online.</p>
+                <button onclick="showServicePage('game')">Pesan Sekarang</button>
+            </div>
+        </div>
+
+        <!-- Halaman Pemilihan Layanan -->
+        <div class="service-page" id="servicePage">
+            <h2>Pilih Layanan</h2>
+            <div class="service-option">
+                <button onclick="showPriceList('pulsa')">Isi Ulang Pulsa</button>
+            </div>
+            <div class="service-option">
+                <button onclick="showPriceList('kuota')">Isi Ulang Kuota Internet</button>
+            </div>
+            <div class="service-option">
+                <button onclick="showPriceList('pln')">Isi Ulang PLN</button>
+            </div>
+            <button class="back-button" onclick="goBackToProductList()">Kembali</button>
+        </div>
+
+        <!-- Halaman Daftar Harga -->
+        <div class="price-list-page" id="priceListPage">
+            <h2>Daftar Harga <span id="serviceTypeTitle"></span></h2>
+            <div id="priceList">
+                <!-- Harga akan di-load di sini -->
+            </div>
+
+            <div class="add-price-form">
+                <h3>Tambah Harga Baru</h3>
+                <input type="text" id="newPriceName" placeholder="Nama Paket">
+                <input type="number" id="newPriceValue" placeholder="Harga">
+                <button onclick="addPrice()">Tambah</button>
+            </div>
+
+            <button class="back-button" onclick="goBackToServicePage()">Kembali ke Pilihan Layanan</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('productList').style.display = 'block';
+
+        function showServicePage(type) {
+            document.getElementById('productList').style.display = 'none';
+            document.getElementById('servicePage').style.display = 'block';
+        }
+
+        function showPriceList(serviceType) {
+            document.getElementById('servicePage').style.display = 'none';
+            document.getElementById('priceListPage').style.display = 'block';
+            document.getElementById('serviceTypeTitle').textContent = serviceType;
+
+            // Panggil server atau API untuk mengambil daftar harga
+            // Menampilkan harga sementara
+            const prices = {
+                pulsa: [
+                    { name: 'Paket 10GB', price: 50000 },
+                    { name: 'Paket 20GB', price: 70000 }
+                ],
+                kuota: [
+                    { name: 'Kuota 5GB', price: 30000 },
+                    { name: 'Kuota 10GB', price: 60000 }
+                ],
+                pln: [
+                    { name: 'PLN 50k', price: 50000 },
+                    { name: 'PLN 100k', price: 100000 }
+                ]
+            };
+
+            const priceList = prices[serviceType];
+            let priceHTML = '';
+            priceList.forEach(item => {
+                priceHTML += `
+                    <div class="price-item">
+                        <span>${item.name}</span>
+                        <span>Rp${item.price}</span>
+                    </div>
+                `;
+            });
+            document.getElementById('priceList').innerHTML = priceHTML;
+        }
+
+        function addPrice() {
+            const name = document.getElementById('newPriceName').value;
+            const price = document.getElementById('newPriceValue').value;
+
+            if (name && price) {
+                const newPriceHTML = `
+                    <div class="price-item">
+                        <span>${name}</span>
+                        <span>Rp${price}</span>
+                    </div>
+                `;
+                document.getElementById('priceList').insertAdjacentHTML('beforeend', newPriceHTML);
+                document.getElementById('newPriceName').value = '';
+                document.getElementById('newPriceValue').value = '';
+            }
+        }
+
+        function goBackToProductList() {
+            document.getElementById('servicePage').style.display = 'none';
+            document.getElementById('productList').style.display = 'block';
+        }
+
+        function goBackToServicePage() {
+            document.getElementById('priceListPage').style.display = 'none';
+            document.getElementById('servicePage').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

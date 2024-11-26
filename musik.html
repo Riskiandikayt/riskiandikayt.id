@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengaturan Musik - Riski Andika</title>
+    <style>
+        /* Global Styles */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #121212;
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            background-color: #181818;
+            padding: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        header h1 {
+            font-size: 1.2rem;
+            color: #1DB954;
+            margin: 0;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            display: flex;
+            flex: 1;
+            justify-content: center;
+            align-items: center;
+            padding: 8px;
+            overflow-y: auto;
+            flex-direction: column;
+        }
+
+        /* Music Player */
+        .music-player {
+            background-color: #181818;
+            border-radius: 8px;
+            padding: 15px;
+            width: 240px;
+            max-width: 100%;
+            text-align: center;
+        }
+
+        /* Album Cover */
+        .album-cover img {
+            width: 60%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        /* Music Info */
+        .music-info h2 {
+            font-size: 1.1rem;
+            margin-top: 8px;
+        }
+
+        .music-info p {
+            font-size: 0.9rem;
+            color: #b3b3b3;
+        }
+
+        /* Audio Player */
+        .audio-player {
+            margin-top: 10px;
+            width: 100%;
+            background-color: #1c1c1c;
+            border-radius: 12px;
+        }
+
+        /* Buttons */
+        .back-button, .settings-button {
+            margin-top: 8px;
+            background-color: #1DB954;
+            padding: 6px 10px;
+            border-radius: 20px;
+            border: none;
+            color: white;
+            font-size: 0.9rem;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+        }
+
+        .back-button:hover, .settings-button:hover {
+            background-color: #1ed760;
+        }
+
+        /* Sound Settings */
+        .settings {
+            background-color: #1c1c1c;
+            border-radius: 8px;
+            padding: 12px;
+            width: 240px;
+            text-align: center;
+            margin-top: 20px;
+            display: none;
+        }
+
+        /* Range Controls */
+        .settings input[type="range"] {
+            width: 100%;
+            height: 3px;
+            background: #333;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .settings input[type="range"]:hover {
+            background: #1DB954;
+        }
+
+        .settings h3 {
+            margin-bottom: 8px;
+        }
+
+        /* File Upload */
+        .file-upload {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .file-upload input {
+            background-color: #333;
+            padding: 6px;
+            border-radius: 5px;
+            color: white;
+            border: none;
+            font-size: 0.9rem;
+        }
+
+        .file-upload button {
+            margin-top: 8px;
+            background-color: #1DB954;
+            padding: 6px;
+            border-radius: 20px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+        }
+
+        .file-upload button:hover {
+            background-color: #1ed760;
+        }
+    /* Musik Info */
+    .music-info {
+        text-align: center;
+        color: #fff;
+    }
+
+    #song-title {
+        font-size: 1.5em;
+        font-weight: bold;
+        margin: 10px 0;
+        white-space: nowrap; /* Mencegah teks terbungkus dalam dua baris */
+        overflow: hidden; /* Menyembunyikan teks yang melebihi batas */
+        text-overflow: ellipsis; /* Menambahkan "..." jika teks terlalu panjang */
+        max-width: 250px; /* Batasi lebar judul lagu */
+        text-align: center; /* Rata tengah */
+    }
+
+    #song-artist {
+        font-size: 1.1em;
+        margin-top: 5px;
+        color: #ccc;
+    }
+
+    /* Album cover image */
+    .album-cover img {
+        width: 150px;
+        height: 150px;
+        border-radius: 10px;
+        object-fit: cover;
+    }
+
+    /* Audio player */
+    .audio-player {
+        width: 100%;
+        margin-top: 15px;
+    }
+
+    /* Button Styles */
+    .back-button, .settings-button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: #0066cc;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .back-button:hover, .settings-button:hover {
+        background-color: #004d99;
+    }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Riski Andika Music</h1>
+    </header>
+
+    <div class="main-content">
+        <!-- File Upload -->
+        <div class="file-upload">
+            <input type="file" id="music-file" accept="audio/*">
+            <button onclick="loadSong()">Unggah dan Putar</button>
+        </div>
+
+        <!-- Music Player -->
+<div class="music-player">
+    <div class="album-cover">
+        <img src="" id="album-cover" alt="Album Cover">
+    </div>
+    <div class="music-info">
+        <h2 id="song-title">Judul Lagu</h2> <!-- Judul lagu -->
+        <p id="song-artist">Artis</p> <!-- Nama artis -->
+        <audio id="audio-player" class="audio-player" controls>
+            <source src="" id="audio-source" type="audio/mp3">
+            Browser Anda tidak mendukung elemen audio.
+        </audio>
+    </div>
+    <button onclick="goBack()" class="back-button">Kembali ke Halaman Musik</button>
+    <button onclick="toggleSettings()" class="settings-button">Pengaturan Suara</button>
+</div>
+
+
+        <!-- Sound Settings -->
+        <div class="settings" id="settings">
+            <h3>Atur Volume Musik</h3>
+            <input type="range" id="volume-control" min="0" max="1000" value="1000" onchange="adjustVolume()">
+            <p>Volume: <span id="volume-value">1000</span></p>
+
+            <h3>Atur Bas</h3>
+            <input type="range" id="bass-control" min="-20" max="20" value="0" onchange="adjustBass()">
+            <p>Bas: <span id="bass-value">0</span></p>
+
+            <h3>Atur Echo</h3>
+            <input type="range" id="echo-control" min="0" max="1" step="0.1" value="0" onchange="adjustEcho()">
+            <p>Echo: <span id="echo-value">0</span></p>
+
+            <h3>Atur Efek Terible</h3>
+            <input type="range" id="terrible-control" min="0" max="1" step="0.1" value="0" onchange="adjustTerrible()">
+            <p>Terible: <span id="terrible-value">0</span></p>
+
+            <h3>Kembali ke Pemutaran Musik</h3>
+            <button onclick="backToPlayback()" class="back-button">Kembali ke Pemutaran Musik</button>
+        </div>
+    </div>
+
+    <script>
+        const audioPlayer = document.getElementById('audio-player');
+        let audioContext, analyser, gainNode, bassFilter, echoNode, terribleEffect;
+
+        function loadSong() {
+            const fileInput = document.getElementById('music-file');
+            const file = fileInput.files[0];
+
+            if (file) {
+                const audioURL = URL.createObjectURL(file);
+                const songTitle = file.name.split('.')[0];
+                const songArtist = "Unknown Artist";
+                
+                // Menambahkan gambar album (misal: dari URL gambar atau nama file)
+                const albumCover = document.getElementById('album-cover');
+                albumCover.src = 'album_cover.jpg';  // Ubah dengan nama file atau URL gambar album
+
+                document.getElementById('song-title').textContent = songTitle;
+                document.getElementById('song-artist').textContent = songArtist;
+                document.getElementById('audio-source').src = audioURL;
+                audioPlayer.load();
+                audioPlayer.play();
+
+                // Set up audio context
+                setUpAudioContext();
+            } else {
+                alert('Silakan unggah file musik terlebih dahulu!');
+            }
+        }
+
+        function setUpAudioContext() {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            analyser = audioContext.createAnalyser();
+            gainNode = audioContext.createGain();
+            bassFilter = audioContext.createBiquadFilter();
+            bassFilter.type = "lowshelf";
+            bassFilter.frequency.setValueAtTime(200, audioContext.currentTime);
+            bassFilter.gain.setValueAtTime(0, audioContext.currentTime);
+            echoNode = audioContext.createDelay();
+            echoNode.delayTime.setValueAtTime(0, audioContext.currentTime);
+            terribleEffect = audioContext.createGain();
+            terribleEffect.gain.setValueAtTime(1, audioContext.currentTime);
+
+            const source = audioContext.createMediaElementSource(audioPlayer);
+            source.connect(bassFilter);
+            bassFilter.connect(echoNode);
+            echoNode.connect(terribleEffect);
+            terribleEffect.connect(gainNode);
+            gainNode.connect(analyser);
+            analyser.connect(audioContext.destination);
+        }
+
+        // Adjust Volume
+        function adjustVolume() {
+            const volumeControl = document.getElementById('volume-control');
+            const volumeValue = document.getElementById('volume-value');
+            gainNode.gain.value = volumeControl.value / 1000;
+            volumeValue.textContent = volumeControl.value;
+        }
+
+        // Adjust Bass
+        function adjustBass() {
+            const bassControl = document.getElementById('bass-control');
+            const bassValue = document.getElementById('bass-value');
+            bassFilter.gain.value = bassControl.value;
+            bassValue.textContent = bassControl.value;
+        }
+
+        // Adjust Echo
+        function adjustEcho() {
+            const echoControl = document.getElementById('echo-control');
+            const echoValue = document.getElementById('echo-value');
+            echoNode.delayTime.value = echoControl.value;
+            echoValue.textContent = echoControl.value;
+        }
+
+        // Adjust Terrible Effect
+        function adjustTerrible() {
+            const terribleControl = document.getElementById('terrible-control');
+            const terribleValue = document.getElementById('terrible-value');
+            terribleEffect.gain.value = terribleControl.value;
+            terribleValue.textContent = terribleControl.value;
+        }
+
+        // Back to Playback
+        function backToPlayback() {
+            const settings = document.getElementById('settings');
+            settings.style.display = 'none';
+            audioPlayer.play();
+        }
+
+        // Toggle Sound Settings
+        function toggleSettings() {
+            const settings = document.getElementById('settings');
+            settings.style.display = settings.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // Go Back to Previous Page
+        function goBack() {
+            audioPlayer.pause();
+            audioPlayer.currentTime = 0;
+            window.location.href = 'gamepad.html';
+        }
+    </script>
+</body>
+</html>

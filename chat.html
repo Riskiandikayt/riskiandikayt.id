@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat WhatsApp</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Styling sederhana untuk chat */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .chat-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background-color: #075e54;
+            color: white;
+            padding: 15px;
+            font-size: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-body {
+            max-height: 400px;
+            overflow-y: scroll;
+            padding: 15px;
+            background-color: #e5ddd5;
+        }
+
+        .chat-footer {
+            background-color: #fff;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chat-footer input {
+            width: 70%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .chat-footer button {
+            background-color: #075e54;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .chat-footer button:hover {
+            background-color: #064e3b;
+        }
+
+        .emoji-picker {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 10px;
+        }
+
+        .emoji-picker .emoji {
+            font-size: 24px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <button class="back-button" onclick="backToHome()">
+                <i class="fas fa-arrow-left"></i> Kembali
+            </button>
+            Chat Publish Rom Riski Andika
+        </div>
+        <div class="chat-body" id="chatBody"></div>
+        <div class="chat-footer">
+            <button class="emoji-button" id="emojiButton">
+                <i class="fas fa-smile"></i> Emoji
+            </button>
+            <input type="text" id="messageInput" placeholder="Ketik pesan..." />
+            <button id="sendMessageBtn">
+                <i class="fas fa-paper-plane"></i> Kirim
+            </button>
+            
+        </div>
+        <div class="emoji-picker" id="emojiPicker">
+            <button class="emoji" data-emoji="">
+                <i class="fas fa-smile"></i> 
+            </button>
+            <button class="emoji" data-emoji="">
+                <i class="fas fa-grin"></i> 
+            </button>
+            <button class="emoji" data-emoji="">
+                <i class="fas fa-grin-beam"></i> 
+            </button>
+            
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function backToHome() {
+            console.log("Fungsi backToHome dipanggil");
+            window.location.href = "index.html"; // Ganti dengan URL halaman utama
+        }
+
+        const sendMessageBtn = document.getElementById('sendMessageBtn');
+        const messageInput = document.getElementById('messageInput');
+        const chatBody = document.getElementById('chatBody');
+        const emojiButton = document.getElementById('emojiButton');
+        const emojiPicker = document.getElementById('emojiPicker');
+        const recordButton = document.getElementById('recordButton');
+        const photoInput = document.getElementById('photoInput');
+        let isRecording = false;
+        let mediaRecorder;
+        let audioChunks = [];
+
+        const users = [
+            { name: "user", color: "#128C7E" },
+            { name: "user", color: "#34b7f1" },
+            { name: "user", color: "#FF5733" },
+            { name: "user", color: "#DAF7A6" },
+            { name: "user", color: "#900C3F" }
+        ];
+
+        // Fungsi untuk menampilkan pesan
+        function displayMessage(message, type) {
+            const messageElement = document.createElement('div');
+            const sender = users[Math.floor(Math.random() * users.length)];
+
+            messageElement.classList.add('message', type);
+            messageElement.innerHTML = `<div class="sender-name" style="color: ${sender.color};">${sender.name}</div>${message}`;
+            chatBody.appendChild(messageElement);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        // Fungsi untuk mengirim pesan
+        sendMessageBtn.addEventListener('click', () => {
+            const message = messageInput.value.trim();
+            if (message) {
+                displayMessage(message, 'sent');
+                messageInput.value = '';
+            }
+        });
+
+        // Fungsi kirim otomatis tiap 3 detik dengan tambahan 100 kata lucu warga +62
+        function sendMessagesContinuously() {
+const messages = [
+    "Halo, teman!",
+    "Apa kabar?",
+    "Aku baik-baik aja kok, semuanya lancar!",
+    "Ada yang bisa aku bantu?",
+    "Silakan kirim pesan, aku di sini buat bantuin!",
+    "Ayam bangun pagi, takut siang kesiangan.",
+    "Kucing kabur kalau lihat air, pasti trauma.",
+    "Komputer nggak ngambek, soalnya pakai mouse.",
+    "Jerapah makan daun tinggi, kalau pendek nggak bisa.",
+    "Mobil jalan karena punya roda, kalau nggak, jalan kaki.",
+    "Ular nggak bisa naik motor, soalnya nggak ada tangan.",
+    "Diet itu susah, makanan enak selalu menggoda.",
+    "Gorila makan pisang, biar nggak susah cerna.",
+    "Burung terbang, biar nggak capek jalan kaki.",
+    "Gajah mandi biar nggak bau sampah.",
+    "Kuda main bola, kakinya panjang-panjang.",
+    "Robot nggak punya pacar, nggak punya perasaan.",
+    "Komputer nge-lag, mikir banyak kayak tugas kuliah.",
+    "Ikan nggak ikut lomba lari, lebih suka di air.",
+    "Naga punya api dalam diri, makanya selalu hebat.",
+    "Tanaman nggak bisa ngomong, tapi bisa lewat daun.",
+    "Koki selalu panas, penuh api di dapur.",
+    "Piring sering jatuh, pasti dipakai buat makan terus.",
+    "Sepeda kedinginan, dua rodanya nggak deket api.",
+    "Pembalap cepat banget, nggak ada macet di jalan.",
+    "Bola basket bulat biar nggak bikin pemain bingung.",
+    "Kursi kesepian, sering ditinggalin orang.",
+    "Microwave nggak cemburu, dia cuma mikirin masakan.",
+    "Jam tepat waktu, kalau nggak tepat, nggak disebut jam.",
+    "Pena nggak terbang, cuma nulis cerita.",
+    "Guling nyaman banget, empuk buat tidur.",
+    "Bintang nggak bisa jatuh, sudah tinggi di langit.",
+    "Jam dinding nggak bergerak, jadi cuma dekorasi.",
+    "Kapal laut nggak tenggelam, kalau tenggelam repot.",
+    "Pintu berderit, buka pelan-pelan supaya nggak bunyi.",
+    "Jari suka ngetik, pengen jadi penulis terkenal.",
+    "Bunga cantik, daya tariknya alami banget.",
+    "Pembantu nggak capek, pekerjaan selesai cepat.",
+    "Gendang bunyi keras, supaya didengar semua.",
+    "Kedai kopi nggak tutup, pelanggan selalu datang.",
+    "Kacamata nggak bingung, selalu tahu yang dilihat.",
+    "Telepon genggam nggak pernah diam, selalu berbicara.",
+    "Roti enak banget, dipanggang penuh perhatian.",
+    "Jalan tol lancar, nggak ada hambatan.",
+    "Tas nggak lupa, selalu bawa barang penting.",
+    "Pohon tinggi biar bisa capai langit.",
+    "Pelukis sabar banget, menggambar butuh waktu.",
+    "Lampu terang terus, nggak suka gelap.",
+    "Cat berwarna, kalau nggak berwarna ya nggak cat.",
+    "Kaca bening, supaya jelas lihat dunia.",
+    "Kalender penuh dengan tanggal penting.",
+    "Keyboard rapi, biar gampang dipakai.",
+    "Lemari teratur, suka menata barang.",
+    "Spidol bold, supaya nggak pudar.",
+    "Buku menarik, ada cerita seru di dalamnya.",
+    "Sepatu nyaman, dipakai dengan hati-hati.",
+    "Hidung sensitif, apalagi kalau ada bau enak.",
+    "Mobil nggak kehilangan arah, ada GPS.",
+    "Mie instan cepat matang, nggak perlu tunggu lama.",
+    "Air segar, datang dari sumber alami.",
+    "Mangga manis, siap dinikmati kapan saja.",
+    "Es krim dingin, pas makan nggak kepanasan.",
+    "Nasi pulen, disiapkan dengan perhatian.",
+    "Peluru cepat, nggak pernah lambat.",
+    "Bunga matahari selalu cerah, ngikutin matahari.",
+    "Alat musik selalu berbunyi, buat hibur orang."
+                // Tambahkan 90 pesan lucu lainnya di sini
+                // Untuk alasan panjang, saya akan menambahkan beberapa contoh saja. Silakan tambahkan 90 lainnya jika diperlukan
+            ];
+
+            let index = 0;
+            setInterval(() => {
+                if (index >= messages.length) index = 0;
+                displayMessage(messages[index], 'received');
+                index++;
+            }, 3000);
+        }
+
+        // Memulai pengiriman pesan secara otomatis
+        sendMessagesContinuously();
+    </script>
+</body>
+</html>

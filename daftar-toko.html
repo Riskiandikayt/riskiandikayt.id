@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Produk Toko</title>
+    <style>
+        /* Animasi masuk untuk produk dan tombol */
+@keyframes slideInFromLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Animasi keluar untuk elemen */
+@keyframes slideOutToLeft {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+}
+
+/* Animasi tombol saat hover */
+@keyframes buttonHover {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.1);
+    }
+}
+
+/* Animasi tombol saat diklik */
+@keyframes buttonClick {
+    from {
+        transform: scale(1.1);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+/* Efek animasi pada produk saat muncul */
+.product {
+    animation: slideInFromLeft 0.5s ease-out;
+    margin: 20px;
+}
+
+/* Efek animasi saat halaman masuk */
+.digital-page, .top-up-game-page, .social-media-page {
+    animation: slideInFromLeft 0.5s ease-out;
+}
+
+/* Efek animasi keluar saat tombol kembali ditekan */
+.product-list, .service-option, .back-button {
+    animation: slideOutToLeft 0.5s ease-out;
+}
+
+/* Efek tombol saat hover */
+button:hover {
+    animation: buttonHover 0.3s ease-out;
+}
+
+/* Efek tombol saat diklik */
+button:active {
+    animation: buttonClick 0.2s ease-in-out;
+}
+
+/* Transisi pada tombol kembali */
+.back-button {
+    transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: #0073e6;
+    color: white;
+}
+
+/* Animasi elemen pada halaman pemilihan layanan */
+.service-option {
+    animation: slideInFromLeft 0.5s ease-out;
+}
+        /* Gaya Umum */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        .product-list, .digital-page, .top-up-game-page, .social-media-page {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .product-list h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #444;
+        }
+
+        /* Produk Item */
+        .product {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+            transition: transform 0.2s;
+        }
+
+        .product:hover {
+            transform: scale(1.02);
+        }
+
+        .product h2 {
+            color: #007bff;
+        }
+
+        .product p {
+            color: #666;
+            font-size: 1em;
+            margin: 10px 0;
+        }
+
+        /* Tombol Pesan */
+        .product button, .service-option button, .back-button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .product button:hover, .service-option button:hover, .back-button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Tombol Pesan dan Kembali */
+        .product button, .service-option button, .back-button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        /* Efek Hover */
+        .product button:hover, .service-option button:hover, .back-button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Halaman Layanan */
+        .service-option {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .service-option img {
+            width: 60px;
+            height: 60px;
+            border-radius: 5px;
+        }
+
+        .service-option span {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .back-button {
+            margin-top: 20px;
+            display: block;
+        }
+        
+    </style>
+</head>
+<body>
+    <h1>Daftar Produk Toko</h1>
+    <h1>RISKI ANDIKA YT</h1>
+
+    <!-- Daftar Produk Toko -->
+    <div class="product-list">
+        <div class="product">
+            <h2>Isi Ulang Pulsa & Kuota</h2>
+            <p>Layanan pengisian pulsa, kuota internet, dan PLN melalui server PPOB.</p>
+            <button onclick="showDigitalPage()">Pesan Sekarang</button>
+        </div>
+        <div class="product">
+            <h2>Top-Up Game</h2>
+            <p>Top-up berbagai game online melalui server Apk Order Kuota.</p>
+            <button onclick="showTopUpGamePage()">Pesan Sekarang</button>
+        </div>
+        <div class="product">
+            <h2>Suntik Sosial Media</h2>
+            <p>Layanan suntik followers, like, dan view untuk berbagai platform sosial media.</p>
+            <button onclick="showSocialMediaPage()">Pesan Sekarang</button>
+        </div>
+    </div>
+<a href="index.html" class="back-button"><i class="fas fa-arrow-left"></i>Back</a>
+
+    <!-- Halaman Pemilihan Layanan Isi Ulang Pulsa & Kuota -->
+    <div id="digitalPage" class="digital-page" style="display: none;">
+        <h2>Pilih Layanan</h2>
+        <div class="service-option">
+            <img src="https://i.ibb.co.com/wy6T3PB/pulsa.jpg" alt="PULSA">
+            <span>Isi Ulang Pulsa</span>
+            <button onclick="showPriceList('pulsa')">Pilih</button>
+        </div>
+        <div class="service-option">
+            <img src="https://i.ibb.co.com/3r7YWnf/kuota.png" alt="KUOTA">
+            <span>Isi Ulang Kuota Internet</span>
+            <button onclick="showPriceList('kuota')">Pilih</button>
+        </div>
+        <div class="service-option">
+            <img src="https://i.ibb.co.com/5BcJCGx/pln.jpg" alt="PLN">
+            <span>Isi Ulang PLN</span>
+            <button onclick="showPriceList('pln')">Pilih</button>
+        </div>
+        <button onclick="backToDaftarToko()">Kembali</button>
+    </div>
+
+    <!-- Halaman Pemilihan Layanan Top-Up Game -->
+    <div id="topUpGamePage" class="top-up-game-page" style="display: none;">
+        <h2>Pilih Game</h2>
+        <div class="service-option">
+            <img src="https://i.ibb.co.com/gtTLYTF/free-fire.jpg alt="Free Fire">
+            <span>Free Fire</span>
+            <button onclick="showPriceList('free-fire')">Pilih</button>
+        </div>
+        <div class="service-option">
+            <img src="https://i.ibb.co.com/C7WtJmL/mobile-legends.jpg" alt="Mobile Legends">
+            <span>Mobile Legends</span>
+            <button onclick="showPriceList('mobile-legends')">Pilih</button>
+        </div>
+        <div class="service-option">
+            <img src="https://i.ibb.co.com/C7WtJmL/mobile-legends.jpg" alt="PUBG Mobile">
+            <span>PUBG Mobile</span>
+            <button onclick="showPriceList('pubg-mobile')">Pilih</button>
+        </div>
+        <div class="service-option">
+            <img src="https://i.ibb.co.com/ZShbnyY/cod-mobile.jpg" alt="Call of Duty Mobile">
+            <span>Call of Duty Mobile</span>
+            <button onclick="showPriceList('cod-mobile')">Pilih</button>
+        </div>
+        <button onclick="backToDaftarToko()">Kembali</button>
+    </div>
+
+    <!-- Halaman Pemilihan Layanan Suntik Sosial Media -->
+    <div id="socialMediaPage" class="social-media-page" style="display: none;">
+        <h2>Pilih Layanan Suntik Sosial Media</h2>
+        <div class="service-option">
+            <img src="https://i.ibb.co.com/QNCSN5x/facebook-logo.jpg" alt="Instagram">
+            <span>Instagram</span>
+            <button onclick="showPriceList('instagram')">Pilih</button>
+        </div>
+        <div class="service-option">
+            <img src="https://i.ibb.co.com/wgTMzbH/pending-1733239197-images.jpg" alt="Facebook">
+            <span>Facebook</span>
+            <button onclick="showPriceList('facebook')">Pilih</button>
+        </div>
+        <div class="service-option">
+            <img src="https://i.ibb.co.com/crWG6y4/twitter-logo.jpg" alt="Twitter">
+            <span>Twitter</span>
+            <button onclick="showPriceList('twitter')">Pilih</button>
+        </div>
+        <div class="service-option">
+            <img src="https://i.ibb.co.com/7yvS9BD/linkedin-logo.png" alt="LinkedIn">
+            <span>LinkedIn</span>
+            <button onclick="showPriceList('linkedin')">Pilih</button>
+        </div>
+        <div class="service-option">
+            <img src="https://i.ibb.co.com/4SdnfZW/github-logo.png" alt="GitHub">
+            <span>GitHub</span>
+            <button onclick="showPriceList('github')">Pilih</button>
+        </div>
+        <button onclick="backToDaftarToko()">Kembali</button>
+    </div>
+
+    <script>
+        function showDigitalPage() {
+            document.querySelector('.product-list').style.display = 'none';
+            document.getElementById('digitalPage').style.display = 'block';
+        }
+
+        function showTopUpGamePage() {
+            document.querySelector('.product-list').style.display = 'none';
+            document.getElementById('topUpGamePage').style.display = 'block';
+        }
+
+        function showSocialMediaPage() {
+            document.querySelector('.product-list').style.display = 'none';
+            document.getElementById('socialMediaPage').style.display = 'block';
+        }
+
+        function showPriceList(service) {
+            if (service === 'pulsa') {
+                window.location.href = 'harga-pulsa.html';  
+            } else if (service === 'kuota') {
+                window.location.href = 'harga-kuota.html';  
+            } else if (service === 'pln') {
+                window.location.href = 'harga-pln.html';  
+            } else if (service === 'free-fire') {
+                window.location.href = 'harga-free-fire.html';  
+            } else if (service === 'mobile-legends') {
+                window.location.href = 'harga-mobile-legends.html';  
+            } else if (service === 'pubg-mobile') {
+                window.location.href = 'harga-pubg-mobile.html';  
+            } else if (service === 'cod-mobile') {
+                window.location.href = 'harga-cod-mobile.html';  
+            } else if (service === 'instagram') {
+                window.location.href = 'harga-instagram.html';  
+            } else if (service === 'facebook') {
+                window.location.href = 'harga-facebook.html';  
+            } else if (service === 'twitter') {
+                window.location.href = 'harga-twitter.html';  
+            } else if (service === 'linkedin') {
+                window.location.href = 'harga-linkedin.html';  
+            } else if (service === 'github') {
+                window.location.href = 'harga-github.html';  
+            }
+        }
+
+        function backToDaftarToko() {
+            window.location.href = 'daftar-toko.html'; 
+        }
+    </script>
+</body>
+</html>

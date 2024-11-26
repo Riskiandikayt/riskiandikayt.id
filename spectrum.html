@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Spectrum</title>
+    <style>
+        /* Global Styles */
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(45deg, #1f1c2c, #928DAB);
+            color: #fff;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        h1, p {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            width: 90%;
+            max-width: 1200px;
+            padding-top: 40px;
+        }
+
+        .title {
+            font-size: 2em;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #f5f5f5;
+            margin-bottom: 20px;
+            animation: titleAnim 1s ease-in-out forwards;
+        }
+
+        @keyframes titleAnim {
+            0% { opacity: 0; transform: translateY(-30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Spectrum Styles */
+        canvas {
+            width: 100%;
+            height: 200px;  /* Memperbesar tinggi canvas untuk menampilkan spectrum lebih baik */
+            border-radius: 15px;
+            background-color: transparent;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: background-color 0.5s ease;
+            margin-bottom: 30px; /* Memberikan ruang bawah untuk info musik */
+        }
+
+        /* Info Box - Menampilkan informasi musik dalam satu baris */
+        .infof {
+            font-size: 1em;
+            color: #ddd;
+            position: relative;
+            top: 10px;  /* Memberikan sedikit jarak ke atas */
+            width: 100%;
+            text-align: center;
+            margin-bottom: 30px;  /* Memberikan ruang antara info dan elemen lainnya */
+        }
+
+        .infof p {
+            margin: 5px 15px;
+            display: inline-block; /* Membuat informasi tampil dalam satu baris */
+            white-space: nowrap;
+        }
+
+        /* Buttons & Controls */
+        .upload-btn, .back-btn, #toggleMusic, .file-link {
+            font-size: 0.9em;
+            padding: 8px 18px;
+            margin-top: 10px;
+            background-color: #0066cc;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s ease, transform 0.2s ease-in-out;
+            display: inline-block;
+        }
+
+        .upload-btn:hover, .back-btn:hover, #toggleMusic:hover, .file-link:hover {
+            background-color: #004d99;
+            transform: translateY(-3px);
+        }
+
+        /* Flexbox untuk tombol Pilih File dan Matikan Musik */
+        .file-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        /* Flexbox untuk kontrol Volume dan Bass */
+        .controls-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        /* Slider Controls */
+        .slider {
+            width: 100px;
+            margin: 10px 0;
+            -webkit-appearance: none;
+            height: 5px;
+            background: #ddd;
+            border-radius: 10px;
+            outline: none;
+            transition: background 0.3s;
+        }
+
+        .slider:hover {
+            background: #f5f5f5;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #00cc99;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            background: #009966;
+        }
+
+        /* Hide the file input */
+        #fileInput {
+            display: none;
+        }
+
+        /* Footer */
+        .footer {
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            color: #f5f5f5;
+            font-size: 1em;
+        }
+    <style>
+    /* Info Box - Menampilkan informasi musik dalam satu baris */
+    .infof {
+        font-size: 1em;
+        color: #ddd;
+        position: relative;
+        top: 10px;  /* Memberikan sedikit jarak ke atas */
+        width: 100%;
+        text-align: center;
+        margin-bottom: 30px;  /* Memberikan ruang antara info dan elemen lainnya */
+        white-space: nowrap;  /* Menghindari teks agar tidak terbungkus dalam dua baris */
+        overflow: hidden;  /* Menyembunyikan teks yang melebihi lebar */
+    }
+
+    .infof p {
+        margin: 5px 15px;
+        display: inline-block; /* Membuat informasi tampil dalam satu baris */
+        text-overflow: ellipsis; /* Menambahkan "..." jika teks terlalu panjang */
+        white-space: nowrap; /* Mencegah teks terbungkus */
+        overflow: hidden; /* Menyembunyikan teks yang keluar dari container */
+        max-width: 200px; /* Batasi lebar teks untuk info musik */
+        text-align: center;
+    }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="title">Music Spectrum</h1>
+        <p1 class="title">RISKI ANDIKA YT</p1>
+        <!-- Canvas untuk Spectrum Musik -->
+        <canvas id="spectrumCanvas"></canvas>        
+
+        <!-- Info Musik (Volume, Bass, Waktu, Artis) dalam satu baris -->
+        <div class="infof">
+            <p id="artistName">Artis: Unknown</p>
+                <div class="info">
+            <p id="currentTime">Waktu: 00:00</p>
+            <p id="volumeValue">Volume: 1</p>
+            <p id="bassValue">Bass: 50</p>
+        </div>
+
+        <!-- Pemilihan File Musik via Link dan tombol Matikan Musik -->
+        <div class="file-controls">
+            <a href="#" class="file-link" id="fileLink">Pilih File Musik</a>
+            <input type="file" id="fileInput" accept="audio/*">
+        </div> 
+        
+        <!-- Tombol untuk Nyalakan/Mati Musik -->
+        <button id="toggleMusic" class="upload-btn">Matikan Musik</button>        
+
+        <!-- Tombol Kontrol Volume dan Bass dalam satu baris -->
+        <div class="controls-row">
+            <div>
+                <label for="volumeControl">Volume: </label>
+                <input type="range" id="volumeControl" class="slider" min="0" max="1" step="0.01" value="1">
+            </div>
+            <div>
+                <label for="bassControl">Bass: </label>
+                <input type="range" id="bassControl" class="slider" min="0" max="100" step="1" value="50">
+            </div>
+        </div>
+
+        <!-- Tombol Kembali -->
+        <a href="gamepad.html">
+            <button class="back-btn">Kembali ke Gamepad</button>
+        </a>
+    </div>
+
+    <script>
+        var canvas = document.getElementById('spectrumCanvas');
+        var ctx = canvas.getContext('2d');
+        var audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        var analyser = audioContext.createAnalyser();
+        var gainNode = audioContext.createGain();
+        var bassNode = audioContext.createBiquadFilter();
+        var audioElement = new Audio();
+        var sourceNode;
+        var lastVolume = 1;
+        var lastBass = 50;
+
+        // Setup Audio ketika file dipilih
+        function setupAudio(file) {
+            audioElement.src = URL.createObjectURL(file);
+            audioElement.load();
+            sourceNode = audioContext.createMediaElementSource(audioElement);
+            sourceNode.connect(analyser);
+            analyser.connect(bassNode);
+            bassNode.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            // Memainkan audio
+            audioElement.play();
+            drawSpectrum();
+        }
+
+        // Fungsi untuk menggambar Spectrum dengan LED Dinamis
+        function drawSpectrum() {
+            var bufferLength = analyser.frequencyBinCount;
+            var dataArray = new Uint8Array(bufferLength);
+            analyser.getByteFrequencyData(dataArray);
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            var barWidth = (canvas.width / bufferLength) * 2.5;
+            var barHeight;
+            var x = 0;
+
+            for (var i = 0; i < bufferLength; i++) {
+                barHeight = dataArray[i];
+                var r = barHeight + (25 * (i / bufferLength));
+                var g = 250 * (i / bufferLength);
+                var b = 50;
+
+                ctx.fillStyle = 'rgb(' + r + ',' + g + ',' + b + ')';
+                ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+
+                x += barWidth + 1;
+            }
+            requestAnimationFrame(drawSpectrum);  // Memanggil fungsi ini untuk mengulang
+        }
+
+        // Update informasi waktu saat musik diputar
+        audioElement.addEventListener('timeupdate', function() {
+            document.getElementById('currentTime').textContent = 'Waktu: ' + formatTime(audioElement.currentTime);
+        });
+
+        // Format waktu dalam format menit:detik
+        function formatTime(seconds) {
+            var mins = Math.floor(seconds / 60);
+            var secs = Math.floor(seconds % 60);
+            return mins + ':' + (secs < 10 ? '0' + secs : secs);
+        }
+
+        // Event Listener untuk file input
+        document.getElementById('fileLink').addEventListener('click', function(e) {
+            document.getElementById('fileInput').click();
+        });
+
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            var file = e.target.files[0];
+            if (file) {
+                setupAudio(file);
+                document.getElementById('artistName').textContent = 'Artis: ' + file.name.split('.')[0]; // Nama file sebagai artis
+            }
+        });
+
+        // Event Listener untuk volume control
+        document.getElementById('volumeControl').addEventListener('input', function(e) {
+            var volume = e.target.value;
+            gainNode.gain.value = volume;
+            document.getElementById('volumeValue').textContent = 'Volume: ' + volume;
+            lastVolume = volume;
+        });
+
+        // Event Listener untuk bass control
+        document.getElementById('bassControl').addEventListener('input', function(e) {
+            var bass = e.target.value;
+            bassNode.type = "lowshelf";
+            bassNode.frequency.value = 200;
+            bassNode.gain.value = bass - 50;
+            document.getElementById('bassValue').textContent = 'Bass: ' + bass;
+            lastBass = bass;
+        });
+
+        var isPlaying = false;
+
+        document.getElementById('toggleMusic').addEventListener('click', function() {
+            if (isPlaying) {
+                audioElement.pause();
+                document.getElementById('toggleMusic').textContent = 'Nyalakan Musik';
+            } else {
+                audioElement.play();
+                document.getElementById('toggleMusic').textContent = 'Matikan Musik';
+            }
+            isPlaying = !isPlaying;
+        });
+
+        // Hentikan musik saat keluar dari halaman
+        window.addEventListener('beforeunload', function() {
+            audioElement.pause();
+            audioElement.currentTime = 0;
+        });
+
+        setupAudio('your-audio-file.mp3'); // Ganti dengan file audio default atau path yang sesuai
+    </script>
+
+</body>
+</html>

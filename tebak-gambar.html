@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tebak Gambar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .game-container {
+            text-align: center;
+            margin-top: 50px;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #333;
+        }
+
+        #gameImage {
+            font-size: 48px;
+            margin-top: 20px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            margin-top: 15px;
+            width: 80%;
+            max-width: 300px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            margin-top: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #status {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        #points {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+
+        #level {
+            font-size: 20px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        #help {
+            font-size: 16px;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        #music-control {
+            margin-top: 20px;
+        }
+
+        #music-control button {
+            background-color: #007BFF;
+        }
+
+        #music-control button:hover {
+            background-color: #0056b3;
+        }
+
+        .back {
+            margin-top: 20px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Tebak Gambar</h1>
+        <p1>SUBCRIBE : RISKI ANDIKA YT</p1>
+        <p>Tebak gambar berikut ini.</p>
+        <p id="status"></p>
+        <p id="pointsContainer">
+            Poin: <span id="points">0</span>
+            &nbsp;|&nbsp;
+            Level: <span id="level">1</span>
+        </p>
+        
+        <div id="gameImage">🦄🌈</div> <!-- Ganti dengan emoji pertama -->
+        
+        <input type="text" id="answer" placeholder="Tebak gambar di sini">
+        <button onclick="checkAnswer()">Tebak</button>        
+        
+        <button onclick="giveHelp()">Bantuan</button>
+        <p id="help" style="display:none;">Ini adalah gambar sebuah pohon.</p>
+
+        <button class="back" onclick="goBack()">Kembali ke Game</button>
+
+        <div id="music-control">
+            <button onclick="toggleMusic()">Hidupkan Musik</button>
+            <audio id="gameMusic" loop>
+                <source src="musik090.mp3" type="audio/mp3"> <!-- Ganti dengan base64 atau URL musik -->
+            </audio>
+        </div>
+    </div>
+
+    <script>
+        let points = 0;
+        let level = 1;
+        const pointsPerLevel = 100; // Poin yang diperlukan untuk naik level
+        let musicPlaying = false;
+
+        // Array gambar dan jawaban
+        const gameData = [
+            {
+                image: "🦄🌈",  // Unicorn dan pelangi
+                answer: "Unicorn di Pelangi"
+            },
+            {
+                image: "👑🐉💎",  // Mahkota, naga, dan berlian
+                answer: "Legenda Naga"
+            },
+            {
+                image: "⚡🦸‍♂️",  // Petir dan pahlawan super
+                answer: "Pahlawan Super dengan Kekuatan Petir"
+            },
+            {
+                image: "🍕🎮",  // Pizza dan video game
+                answer: "Malam Permainan dengan Pizza"
+            },
+            {
+                image: "🛸👽🌍",  // UFO, alien, dan bumi
+                answer: "Penyerbuan Alien"
+            },
+            {
+                image: "💔👩‍❤️‍👨",  // Hati yang patah dan pasangan
+                answer: "Cinta yang Patah"
+            },
+            {
+                image: "🧙‍♂️🗡️🧝‍♀️",  // Penyihir, pedang, dan elf
+                answer: "Petualangan Fantasi"
+            },
+            {
+                image: "🐍🍎",  // Ular dan apel
+                answer: "Kisah Adam dan Hawa"
+            },
+            {
+                image: "🏰👸🧙‍♀️",  // Kastil, putri, dan penyihir
+                answer: "Putri dan Penyihir"
+            },
+            {
+                image: "🚀🌑",  // Roket dan bulan
+                answer: "Misi ke Bulan"
+            }
+        ];
+
+        let currentImageIndex = 0; // Menyimpan indeks gambar saat ini
+// Fungsi untuk memilih soal acak
+function getRandomQuestion() {
+    const randomIndex = Math.floor(Math.random() * gameData.length);
+    return gameData[randomIndex];
+}
+        // Fungsi untuk mengecek jawaban
+        function checkAnswer() {
+            const userAnswer = document.getElementById('answer').value;
+            if (userAnswer.toLowerCase() === gameData[currentImageIndex].answer.toLowerCase()) {
+                points += 10; // Menambah poin jika jawaban benar
+                document.getElementById('status').textContent = 'Selamat! Jawaban benar.';
+                nextImage(); // Menampilkan gambar berikutnya
+            } else {
+                points = Math.max(0, points - 5); // Mengurangi poin jika jawaban salah
+                document.getElementById('status').textContent = 'Coba lagi!';
+            }
+            updatePointsAndLevel(); // Update tampilan poin dan level
+        }
+
+        // Fungsi untuk memberikan bantuan
+        function giveHelp() {
+            document.getElementById('help').style.display = 'block';
+            points = Math.max(0, points - 2); // Mengurangi poin saat bantuan digunakan
+            updatePointsAndLevel();
+        }
+
+        // Fungsi untuk memperbarui tampilan poin dan level
+        function updatePointsAndLevel() {
+            document.getElementById('points').textContent = points;
+
+            // Mengupdate level berdasarkan poin
+            level = Math.floor(points / pointsPerLevel) + 1;
+            document.getElementById('level').textContent = level;
+        }
+
+        // Fungsi untuk mengubah gambar setelah jawaban benar
+        function nextImage() {
+            currentImageIndex++;
+            if (currentImageIndex < gameData.length) {
+                // Update gambar dan jawaban untuk gambar berikutnya
+                document.getElementById('gameImage').textContent = gameData[currentImageIndex].image;
+                document.getElementById('help').style.display = 'none'; // Sembunyikan bantuan untuk gambar baru
+            } else {
+                document.getElementById('status').textContent = 'Selamat, Anda telah menyelesaikan permainan!';
+            }
+        }
+
+        // Fungsi untuk menghidupkan atau mematikan musik
+        function toggleMusic() {
+            const music = document.getElementById('gameMusic');
+            if (musicPlaying) {
+                music.pause();
+                document.querySelector('#music-control button').textContent = 'Hidupkan Musik';
+            } else {
+                music.play();
+                document.querySelector('#music-control button').textContent = 'Matikan Musik';
+            }
+            musicPlaying = !musicPlaying;
+        }
+
+        // Fungsi untuk kembali ke halaman game sebelumnya
+        function goBack() {
+            window.location.href = 'game.html';
+        }
+    </script>
+</body>
+</html>

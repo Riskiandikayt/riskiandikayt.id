@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pertanyaan - Riski Andika</title>
+    <style>
+        /* Style the page */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ecf0f1;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }        
+
+        .game-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            width: 500px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .game-container h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        input {
+            padding: 10px;
+            font-size: 18px;
+            margin-top: 20px;
+            width: 100%;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .help {
+            background-color: #f39c12;
+        }
+
+        .back {
+            background-color: #2ecc71;
+        }
+
+        .next {
+            background-color: #8e44ad;
+        }
+
+        .score {
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="game-container">
+    <h1>Pertanyaan</h1>
+    <p1>SUBCRIBE : RISKI ANDIKA YT</p>
+    <!-- Level dan skor -->
+    <div class="level-score">
+        <p id="pointsContainer">
+    Poin: <span id="points">0</span>
+    &nbsp;|&nbsp;
+    Level: <span id="level">1</span>
+</p>
+    </div>
+    <p id="question">Siapa Presiden Indonesia saat ini?</p>
+    <input type="text" id="answer" placeholder="Masukkan jawaban">
+    <button onclick="checkAnswer()">Jawab</button>
+    <p id="status"></p>
+    <button class="help" onclick="showHelp()">Bantuan</button>
+    <button class="back" onclick="goBack()">Kembali ke Game</button>
+    <button class="next" onclick="nextQuestion()" style="display: none;">Lanjut ke Jawaban Selanjutnya</button>
+   
+    <!-- Tombol musik -->
+    <button onclick="toggleMusic()" id="musicButton">Hidupkan Musik</button>
+</div>
+
+<!-- Elemen Audio untuk Musik -->
+<audio id="backgroundMusic" loop>
+    <source src="music11.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+</audio>
+
+<script>
+    // Daftar pertanyaan dan jawabannya
+    const questions = [
+        { question: "Siapa Presiden Indonesia saat ini?", answer: "Joko Widodo" },
+        { question: "Berapa hasil dari 3 + 7?", answer: "10" },
+        { question: "Siapa yang ditemukan penicillin?", answer: "Alexander Fleming" },
+        { question: "Berapa hasil dari 5 x 5?", answer: "25" },
+        { question: "Apa ibu kota Indonesia?", answer: "Jakarta" },
+        { question: "Siapa penulis novel 'Laskar Pelangi'?", answer: "Andrea Hirata" },
+        { question: "Berapa jumlah provinsi di Indonesia?", answer: "34" },
+        { question: "Siapa pendiri Microsoft?", answer: "Bill Gates" },
+        { question: "Apa warna bendera Jepang?", answer: "Merah dan Putih" },
+        { question: "Berapa jumlah hari dalam seminggu?", answer: "7" }
+    ];
+
+    let currentQuestionIndex = 0; // Menunjukkan pertanyaan yang sedang ditampilkan
+    let score = 0; // Menyimpan jumlah poin
+    let wrongAnswers = 0; // Menyimpan jumlah jawaban salah
+    let level = 1; // Menyimpan level permainan
+    let questionsPerLevel = 3; // Jumlah pertanyaan per level
+
+    // Fungsi untuk menampilkan pertanyaan
+    function displayQuestion() {
+        const currentQuestion = questions[currentQuestionIndex];
+        document.getElementById('question').textContent = currentQuestion.question;
+        document.getElementById('answer').value = ''; // Mengosongkan inputan
+        document.getElementById('status').textContent = ''; // Mengosongkan status
+        document.querySelector('.next').style.display = 'none'; // Menyembunyikan tombol lanjut
+        updateScore(); // Memperbarui tampilan poin dan salah
+        updateLevel(); // Memperbarui tampilan level
+    }
+
+    // Fungsi untuk memeriksa jawaban
+    function checkAnswer() {
+        const userAnswer = document.getElementById('answer').value;
+        const statusElement = document.getElementById('status');
+        const correctAnswer = questions[currentQuestionIndex].answer;
+
+        if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+            statusElement.textContent = 'Selamat! Jawaban benar.';
+            statusElement.style.color = 'green'; // Teks berwarna hijau jika benar
+            score++; // Menambah poin jika benar
+            document.querySelector('.next').style.display = 'inline-block'; // Menampilkan tombol lanjut
+        } else {
+            statusElement.textContent = 'Coba lagi! Jawaban salah.';
+            statusElement.style.color = 'red'; // Teks berwarna merah jika salah
+            wrongAnswers++; // Menambah jumlah jawaban salah
+        }
+    }
+
+    // Menampilkan petunjuk
+    function showHelp() {
+        alert('Petunjuk:\n1. Masukkan jawaban yang benar.\n2. Jika salah, coba lagi.\n3. Jika benar, lanjutkan ke pertanyaan berikutnya!');
+    }
+
+    // Fungsi untuk melanjutkan ke pertanyaan berikutnya
+    function nextQuestion() {
+        // Kosongkan input dan status
+        document.getElementById('answer').value = '';
+        document.getElementById('status').textContent = '';
+        document.querySelector('.next').style.display = 'none'; // Sembunyikan tombol lanjut
+
+        // Periksa apakah ada pertanyaan selanjutnya
+        if (currentQuestionIndex < questions.length - 1) {
+            currentQuestionIndex++;
+            displayQuestion();
+        } else {
+            document.getElementById('question').textContent = "Selamat! Kamu telah menyelesaikan semua pertanyaan.";
+            document.getElementById('answer').style.display = 'none'; // Sembunyikan input jawaban
+            document.querySelector('.next').style.display = 'none'; // Sembunyikan tombol lanjut
+        }
+
+        // Cek apakah perlu naik level
+        if ((currentQuestionIndex + 1) % questionsPerLevel === 0) {
+            level++;
+            updateLevel();
+        }
+    }
+
+    // Fungsi untuk kembali ke halaman game.html
+    function goBack() {
+        window.location.href = 'game.html';  // Ganti dengan URL file game.html Anda
+    }
+
+    // Memperbarui tampilan poin dan jawaban salah
+    function updateScore() {
+        document.getElementById('score').textContent = `Poin: ${score} | Salah: ${wrongAnswers}`;
+    }
+
+    // Memperbarui tampilan level
+    function updateLevel() {
+        document.getElementById('level').textContent = `Level: ${level}`;
+    }
+
+    // Fungsi untuk menyalakan dan mematikan musik
+    function toggleMusic() {
+        const music = document.getElementById('backgroundMusic');
+        const musicButton = document.getElementById('musicButton');
+
+        if (music.paused) {
+            music.play();
+            musicButton.textContent = 'Matikan Musik'; // Ganti teks tombol
+        } else {
+            music.pause();
+            musicButton.textContent = 'Hidupkan Musik'; // Ganti teks tombol
+        }
+    }
+
+    // Menampilkan pertanyaan pertama ketika halaman dimuat
+    displayQuestion();
+</script>
+</body>
+</html>

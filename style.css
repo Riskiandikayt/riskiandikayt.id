@@ -1,0 +1,80 @@
+/* Gaya umum untuk seluruh halaman */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+h2 {
+    text-align: center;
+    margin: 20px 0;
+    color: #444;
+}
+
+/* Gaya untuk daftar harga */
+#price-list {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+#price-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#price-list li {
+    padding: 10px 15px;
+    border-bottom: 1px solid #eaeaea;
+    display: flex;
+    justify-content: space-between;
+}
+
+#price-list li:last-child {
+    border-bottom: none;
+}
+
+#price-list li strong {
+    font-weight: bold;
+}
+
+/* Gaya tombol kembali */
+.back-button {
+    display: inline-block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: #0056b3;
+}
+
+/* Gaya untuk layar kecil */
+@media (max-width: 600px) {
+    #price-list {
+        padding: 15px;
+    }
+
+    #price-list li {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .back-button {
+        width: 90%;
+        text-align: center;
+    }
+}
